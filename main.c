@@ -6,15 +6,16 @@
 int main() {
     CPU *cpu = constructCPU(32);
     printf("cpu construct works\n");
-    cpu->memory[0] = MOV_LIT_REG_OP;
-    cpu->memory[1] = 11;
-    cpu->memory[2] = REGISTER_1;
-    cpu->memory[3] = MOV_LIT_REG_OP;
-    cpu->memory[4] = 13;
-    cpu->memory[5] = REGISTER_2;
-    cpu->memory[6] = ADD_REG_REG_OP;
-    cpu->memory[7] = REGISTER_1;
-    cpu->memory[8] = REGISTER_2;
+    int i = 0;
+    cpu->memory[i++] = MOV_LIT_REG_OP;
+    cpu->memory[i++] = 11;
+    cpu->memory[i++] = REGISTER_1;
+    cpu->memory[i++] = MOV_LIT_REG_OP;
+    cpu->memory[i++] = 13;
+    cpu->memory[i++] = REGISTER_2;
+    cpu->memory[i++] = ADD_REG_REG_OP;
+    cpu->memory[i++] = REGISTER_1;
+    cpu->memory[i++] = REGISTER_2;
     step(cpu);
     step(cpu);
     step(cpu);

@@ -29,10 +29,14 @@ void ADD_REG_REG(CPU *cpu) {
     printf("ADD REGISTERS GOT: %d\n", value);
     setRegister(cpu, ACCUMULATOR, value);
 }
+void MOV_REG_REG(CPU *cpu){
+
+}
 
 cpuVoidFuncs *getMemonicFunctions() {
     cpuVoidFuncs *func = malloc((sizeof(Instructions) / sizeof(int)) * sizeof(cpuVoidFuncs));
     func[MOV_LIT_REG_OP] = &MOV_LIT_REG;
+    func[MOV_REG_REG_OP] = &MOV_REG_REG;
     func[ADD_REG_REG_OP] = &ADD_REG_REG;
     return func;
 }

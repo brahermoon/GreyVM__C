@@ -11,5 +11,7 @@
 
 typedef enum {
     MOV_LIT_REG_OP,
+    MOV_REG_REG_OP,
     ADD_REG_REG_OP
+
 }Instructions ;
