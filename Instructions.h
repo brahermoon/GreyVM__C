@@ -9,9 +9,16 @@
 
 #include "stdint.h"
 
+//this enum is responsible for the right opcodes for the asm in binary. It helps you code properly too!
 typedef enum {
     MOV_LIT_REG_OP,
     MOV_REG_REG_OP,
-    ADD_REG_REG_OP
-
-}Instructions ;
+    MOV_LIT_MEM_OP,
+    MOV_REG_MEM_OP,
+    MOV_MEM_REG_OP,
+    MOV_MEM_MEM_OP,
+    ADD_LIT_REG_OP,
+    ADD_REG_REG_OP,
+    HLT_OP,
+    DBG_OP
+} Instructions;
