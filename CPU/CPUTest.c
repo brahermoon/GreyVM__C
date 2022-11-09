@@ -78,5 +78,6 @@ void TestCPU() {
     step(cpu);
     printTest(CPUTest, "test that halt is false", assertEquals(cpu->halt == true));
     freeCPU(cpu);
+    freeTestCase(CPUTest);
 }
 
