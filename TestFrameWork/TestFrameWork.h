@@ -15,7 +15,11 @@
 typedef struct {
     char *name;
 } TestCase;
+
 TestCase *createTestCase(char *name);
+
 bool assertEquals(bool any);
+
 void printTest(TestCase *testCase, char *description, bool test);
+
 void freeTestCase(TestCase *testCase);

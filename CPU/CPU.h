@@ -1,7 +1,7 @@
 //
 // Created by Bryan Herz on 08.11.22.
 //
-
+#pragma once
 #ifndef GREYVM_C_CPU_H
 #define GREYVM_C_CPU_H
 
@@ -35,7 +35,7 @@ uint8_t fetchByte(CPU *cpu);
 
 uint16_t fetchWord(CPU *cpu);
 
-CPU *constructCPU(int memSize,bool debug);
+CPU *constructCPU(int memSize, bool debug);
 
 cpuVoidFuncs *getMemonicFunctions();
 
