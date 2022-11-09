@@ -235,5 +235,8 @@ void loadProgramm(CPU *cpu, const uint8_t *programmArray, int size) {
 
     for (int i = 0; i < size; i++) {
         cpu->memory[i] = programmArray[i];
+        if (cpu->debug) {
+            printf("loaded programm at index %d with value %d to cpu memory at %d\n", i, programmArray[i], i);
+        }
     }
 }
