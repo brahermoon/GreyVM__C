@@ -5,52 +5,53 @@
 #include "CPUTest.h"
 
 void TestCPU() {
+    uint8_t programmArray[33];
     int memSize = 256;
     TestCase *CPUTest = createTestCase("CPUTest");
     CPU *cpu = constructCPU(memSize, false);
     int i = 0;
-    cpu->memory[i++] = MOV_LIT_REG_OP;
-    cpu->memory[i++] = 11;
-    cpu->memory[i++] = REGISTER_1 >> 24;
-    cpu->memory[i++] = REGISTER_1;
+    programmArray[i++] = MOV_LIT_REG_OP;
+    programmArray[i++] = 11;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
 
-    cpu->memory[i++] = MOV_LIT_REG_OP;
-    cpu->memory[i++] = 13;
-    cpu->memory[i++] = REGISTER_2 >> 24;
-    cpu->memory[i++] = REGISTER_2;
+    programmArray[i++] = MOV_LIT_REG_OP;
+    programmArray[i++] = 13;
+    programmArray[i++] = REGISTER_2 >> 24;
+    programmArray[i++] = REGISTER_2;
 
-    cpu->memory[i++] = ADD_REG_REG_OP;
-    cpu->memory[i++] = REGISTER_1 >> 24;
-    cpu->memory[i++] = REGISTER_1;
-    cpu->memory[i++] = REGISTER_2 >> 24;
-    cpu->memory[i++] = REGISTER_2;
+    programmArray[i++] = ADD_REG_REG_OP;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
+    programmArray[i++] = REGISTER_2 >> 24;
+    programmArray[i++] = REGISTER_2;
 
-    cpu->memory[i++] = MOV_REG_REG_OP;
-    cpu->memory[i++] = ACCUMULATOR >> 24;
-    cpu->memory[i++] = ACCUMULATOR;
-    cpu->memory[i++] = REGISTER_1 >> 24;
-    cpu->memory[i++] = REGISTER_1;
+    programmArray[i++] = MOV_REG_REG_OP;
+    programmArray[i++] = ACCUMULATOR >> 24;
+    programmArray[i++] = ACCUMULATOR;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
 
-    cpu->memory[i++] = MOV_LIT_MEM_OP;
-    cpu->memory[i++] = 200;
-    cpu->memory[i++] = 0x00;
-    cpu->memory[i++] = 0xFF;
+    programmArray[i++] = MOV_LIT_MEM_OP;
+    programmArray[i++] = 200;
+    programmArray[i++] = 0x00;
+    programmArray[i++] = 0xFF;
 
-    cpu->memory[i++] = MOV_REG_MEM_OP;
-    cpu->memory[i++] = ACCUMULATOR >> 24;
-    cpu->memory[i++] = ACCUMULATOR;
-    cpu->memory[i++] = 0x00;
-    cpu->memory[i++] = 0xFF;
+    programmArray[i++] = MOV_REG_MEM_OP;
+    programmArray[i++] = ACCUMULATOR >> 24;
+    programmArray[i++] = ACCUMULATOR;
+    programmArray[i++] = 0x00;
+    programmArray[i++] = 0xFF;
 
-    cpu->memory[i++] = ADD_LIT_REG_OP;
-    cpu->memory[i++] = 70;
-    cpu->memory[i++] = REGISTER_1 >> 24;
-    cpu->memory[i++] = REGISTER_1;
+    programmArray[i++] = ADD_LIT_REG_OP;
+    programmArray[i++] = 70;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
 
-    cpu->memory[i++] = DBG_OP;
+    programmArray[i++] = DBG_OP;
 
-    cpu->memory[i++] = HLT_OP;
-
+    programmArray[i++] = HLT_OP;
+    loadProgramm(cpu, programmArray, 33);
     step(cpu);
     printTest(CPUTest, "test that register r1 is set to 11",
               assertEquals(getRegister(cpu, REGISTER_1) == (uint16_t) 11));

@@ -52,3 +52,5 @@ void execute(CPU *cpu, uint8_t instruction);
 void step(CPU *cpu);
 
 void run(CPU *cpu);
+
+void loadProgramm(CPU *cpu, const uint8_t *programmArray, int size);

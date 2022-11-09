@@ -230,3 +230,10 @@ void run(CPU *cpu) {
         step(cpu);
     }
 }
+
+void loadProgramm(CPU *cpu, const uint8_t *programmArray, int size) {
+
+    for (int i = 0; i < size; i++) {
+        cpu->memory[i] = programmArray[i];
+    }
+}
