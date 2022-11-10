@@ -131,6 +131,32 @@ void MOV_MEM_MEM(CPU *cpu) {
     }
 }
 
+void INC(CPU *cpu) {
+    uint16_t registeR = fetchWord(cpu);
+    uint16_t registeRVal = getRegister(cpu, registeR);
+    uint16_t registerValInc = registeRVal + 1;
+    setRegister(cpu, registeR, registerValInc);
+    if (cpu->debug) {
+        printf("IN INC\n");
+        printf("Register Index: %d\n", registeR);
+        printf("Register Value: %d\n", registeRVal);
+        printf("New Register Value: %d\n", registeRVal);
+    }
+}
+
+void DEC(CPU *cpu) {
+    uint16_t registeR = fetchWord(cpu);
+    uint16_t registeRVal = getRegister(cpu, registeR);
+    uint16_t registerValInc = registeRVal - 1;
+    setRegister(cpu, registeR, registerValInc);
+    if (cpu->debug) {
+        printf("IN INC\n");
+        printf("Register Index: %d\n", registeR);
+        printf("Register Value: %d\n", registeRVal);
+        printf("New Register Value: %d\n", registeRVal);
+    }
+}
+
 cpuVoidFuncs *getMemonicFunctions() {
     cpuVoidFuncs *func = malloc((sizeof(Instructions) / sizeof(uint16_t)) * sizeof(cpuVoidFuncs));
     func[MOV_LIT_MEM_OP] = &MOV_LIT_MEM;
@@ -141,6 +167,8 @@ cpuVoidFuncs *getMemonicFunctions() {
     func[ADD_REG_REG_OP] = &ADD_REG_REG;
     func[MOV_MEM_MEM_OP] = &MOV_MEM_MEM;
     func[ADD_LIT_REG_OP] = &ADD_LIT_REG;
+    func[INC_OP] = &INC;
+    func[DEC_OP] = &DEC;
     func[DBG_OP] = &DBG;
     func[HLT_OP] = &HLT;
     return func;

@@ -19,6 +19,9 @@ typedef enum {
     MOV_MEM_MEM_OP,
     ADD_LIT_REG_OP,
     ADD_REG_REG_OP,
+    JMP_EQUAL_OP,
+    INC_OP,
+    DEC_OP,
     HLT_OP,
     DBG_OP
 } Instructions;

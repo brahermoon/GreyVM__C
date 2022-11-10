@@ -5,7 +5,7 @@
 #include "CPUTest.h"
 
 void TestCPU() {
-    uint8_t programmArray[33];
+    uint8_t programmArray[39];
     int memSize = 256;
     TestCase *CPUTest = createTestCase("CPUTest");
     CPU *cpu = constructCPU(memSize, false);
@@ -48,36 +48,63 @@ void TestCPU() {
     programmArray[i++] = REGISTER_1 >> 24;
     programmArray[i++] = REGISTER_1;
 
+    programmArray[i++] = INC_OP;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
+
+    programmArray[i++] = DEC_OP;
+    programmArray[i++] = REGISTER_2 >> 24;
+    programmArray[i++] = REGISTER_2;
+
     programmArray[i++] = DBG_OP;
 
     programmArray[i++] = HLT_OP;
-    loadProgramm(cpu, programmArray, 33);
+    loadProgramm(cpu, programmArray, 39);
     step(cpu);
     printTest(CPUTest, "test that register r1 is set to 11",
               assertEquals(getRegister(cpu, REGISTER_1) == (uint16_t) 11));
+
     step(cpu);
     printTest(CPUTest, "test that register r2 is set to 13",
               assertEquals(getRegister(cpu, REGISTER_2) == (uint16_t) 13));
+
     step(cpu);
     printTest(CPUTest, "test that register acc is set to 24",
               assertEquals(getRegister(cpu, ACCUMULATOR) == (uint16_t) 24));
+
     step(cpu);
     printTest(CPUTest, "test that register r1 is equal to acc", assertEquals(getRegister(cpu, REGISTER_1) ==
                                                                              getRegister(cpu, ACCUMULATOR)));
+
     step(cpu);
     printTest(CPUTest, "test that 200 gets saved at position 0x00FF in memory",
               assertEquals(cpu->memory[0x00FF] == 200));
+
     step(cpu);
     printTest(CPUTest, "test that the value of acc gets saved at position 0x00FF in memory",
               assertEquals(cpu->memory[0x00FF] == getRegister(cpu, ACCUMULATOR)));
+
     step(cpu);
     printTest(CPUTest, "test that the acc register contains the sum of r1 and 70",
               assertEquals(getRegister(cpu, ACCUMULATOR) ==
                            getRegister(cpu, REGISTER_1) + 70));
+
+    uint16_t prevR1 = getRegister(cpu, REGISTER_1);
+    step(cpu);
+    printTest(CPUTest, "test that the value of r1 is equal to the previous value +1",
+              assertEquals(getRegister(cpu, REGISTER_1) == prevR1 + 1));
+
+    uint16_t prevR2 = getRegister(cpu, REGISTER_2);
+    step(cpu);
+    printTest(CPUTest, "test that the value of r1 is equal to the previous value -1",
+              assertEquals(getRegister(cpu, REGISTER_2) == prevR2 - 1));
+
     step(cpu);
     printTest(CPUTest, "test that the debug flag is set to true", assertEquals(cpu->debug == true));
+
     step(cpu);
     printTest(CPUTest, "test that halt is false", assertEquals(cpu->halt == true));
+
     freeCPU(cpu);
     freeTestCase(CPUTest);
 }
