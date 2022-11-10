@@ -1,0 +1,3 @@
+/Users/bherz/code/C/Schule/GreyVM_C/cmake-build-debug/CMakeFiles/GreyVM_C.dir
+/Users/bherz/code/C/Schule/GreyVM_C/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/bherz/code/C/Schule/GreyVM_C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
