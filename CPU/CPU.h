@@ -15,8 +15,10 @@
 enum Registers {
     INSTRUCTION_POINTER = 0,
     ACCUMULATOR = 2,
-    REGISTER_1 = 4,
-    REGISTER_2 = 6
+    STACK_POINTER = 4,
+    STACK_FRAME_POINTER = 6,
+    REGISTER_1 = 8,
+    REGISTER_2 = 10
 };
 
 typedef struct {

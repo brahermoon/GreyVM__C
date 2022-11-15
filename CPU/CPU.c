@@ -17,6 +17,23 @@ uint16_t getRegister(CPU *cpu, int regIndex) {
     return wd;
 }
 
+void push16(CPU *cpu, uint16_t value) {
+    uint16_t sp = getRegister(cpu, STACK_POINTER);
+    cpu->memory[sp] = value >> 8;
+    setRegister(cpu, STACK_POINTER, sp - 1);
+    sp = getRegister(cpu, STACK_POINTER);
+    cpu->memory[sp] = value;
+    setRegister(cpu, STACK_POINTER, sp - 1);
+}
+
+void pop16(CPU *cpu, uint16_t registerIndex) {
+    uint16_t sp = getRegister(cpu, STACK_POINTER);
+    uint8_t firstByte = cpu->registerMemory[sp];
+    uint8_t secondByte = cpu->registerMemory[sp + 1];
+    uint16_t wd = (uint16_t) (firstByte << 8 | secondByte);
+    setRegister(cpu, registerIndex, wd);
+}
+
 void setRegister(CPU *cpu, int regIndex, uint16_t value) {
     uint8_t valPart1 = (uint8_t) value >> 8;
     uint8_t valPart2 = (uint8_t) value;
@@ -176,6 +193,22 @@ void JMP_REG(CPU *cpu) {
     }
 }
 
+void PUSH_LIT(CPU *cpu) {
+    uint16_t literal = (uint16_t) fetchByte(cpu);
+    push16(cpu, literal);
+}
+
+void PUSH_REG(CPU *cpu) {
+    uint16_t registeR = fetchWord(cpu);
+    uint16_t registeRVal = getRegister(cpu, registeR);
+    push16(cpu, registeRVal);
+}
+
+void POP_REG(CPU *cpu) {
+    uint16_t registeR1 = fetchWord(cpu);
+    pop16(cpu, registeR1);
+}
+
 cpuVoidFuncs *getMemonicFunctions() {
     cpuVoidFuncs *func = malloc((sizeof(Instructions) / sizeof(uint16_t)) * sizeof(cpuVoidFuncs));
     func[MOV_LIT_MEM_OP] = &MOV_LIT_MEM;
@@ -188,6 +221,9 @@ cpuVoidFuncs *getMemonicFunctions() {
     func[ADD_LIT_REG_OP] = &ADD_LIT_REG;
     func[JMP_LIT_OP] = &JMP_LIT;
     func[JMP_REG_OP] = &JMP_REG;
+    func[PUSH_LIT_OP] = &PUSH_LIT;
+    func[PUSH_REG_OP] = &PUSH_REG;
+    func[POP_REG_OP] = &POP_REG;
     func[INC_OP] = &INC;
     func[DEC_OP] = &DEC;
     func[DBG_OP] = &DBG;
@@ -197,6 +233,8 @@ cpuVoidFuncs *getMemonicFunctions() {
 
 void resetCPU(CPU *cpu) {
     setRegister(cpu, INSTRUCTION_POINTER, 0);
+    setRegister(cpu, STACK_POINTER, cpu->memsize - 1);
+    setRegister(cpu, STACK_FRAME_POINTER, 0);
     setRegister(cpu, ACCUMULATOR, 0);
     setRegister(cpu, REGISTER_1, 0);
     setRegister(cpu, REGISTER_2, 0);
