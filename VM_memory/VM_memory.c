@@ -17,7 +17,7 @@ void resetMemory(uint8_t *memory, int size) {
 
 void printMemoryContent(uint8_t *memory, int size) {
     for (int i = 0; i < size / sizeof(uint8_t); i++) {
-        printf("%hhx\n", memory[i]);
+        printf("%d\n", memory[i]);
     }
 }
 

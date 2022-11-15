@@ -31,7 +31,7 @@ void setRegister(CPU *cpu, int regIndex, uint16_t value) {
 }
 
 void MOV_LIT_REG(CPU *cpu) {
-    uint16_t litetal = fetchByte(cpu);
+    uint16_t litetal = (uint16_t) fetchByte(cpu);
     uint16_t registeR = fetchWord(cpu);
     setRegister(cpu, registeR, litetal);
     if (cpu->debug) {
@@ -84,7 +84,7 @@ void HLT(CPU *cpu) {
 
 void DBG(CPU *cpu) {
     if (cpu->debug) {
-        printf("In DBG");
+        printf("In DBG\n");
     }
     cpu->debug = !cpu->debug;
 }
@@ -157,6 +157,25 @@ void DEC(CPU *cpu) {
     }
 }
 
+void JMP_LIT(CPU *cpu) {
+    uint8_t literal = fetchByte(cpu);
+    setRegister(cpu, INSTRUCTION_POINTER, literal);
+    if (cpu->debug) {
+        printf("In JMP_LIT\n");
+        printf("literal Val: %hx\n", literal);
+    }
+}
+
+void JMP_REG(CPU *cpu) {
+    uint16_t registeR = fetchWord(cpu);
+    uint16_t registeRVal = getRegister(cpu, registeR);
+    setRegister(cpu, INSTRUCTION_POINTER, registeRVal);
+    if (cpu->debug) {
+        printf("In JMP_LIT\n");
+        printf("literal Val: %hx\n", registeRVal);
+    }
+}
+
 cpuVoidFuncs *getMemonicFunctions() {
     cpuVoidFuncs *func = malloc((sizeof(Instructions) / sizeof(uint16_t)) * sizeof(cpuVoidFuncs));
     func[MOV_LIT_MEM_OP] = &MOV_LIT_MEM;
@@ -167,6 +186,8 @@ cpuVoidFuncs *getMemonicFunctions() {
     func[ADD_REG_REG_OP] = &ADD_REG_REG;
     func[MOV_MEM_MEM_OP] = &MOV_MEM_MEM;
     func[ADD_LIT_REG_OP] = &ADD_LIT_REG;
+    func[JMP_LIT_OP] = &JMP_LIT;
+    func[JMP_REG_OP] = &JMP_REG;
     func[INC_OP] = &INC;
     func[DEC_OP] = &DEC;
     func[DBG_OP] = &DBG;
@@ -175,7 +196,7 @@ cpuVoidFuncs *getMemonicFunctions() {
 }
 
 void resetCPU(CPU *cpu) {
-    setRegister(cpu, STACK_POINTER, 0);
+    setRegister(cpu, INSTRUCTION_POINTER, 0);
     setRegister(cpu, ACCUMULATOR, 0);
     setRegister(cpu, REGISTER_1, 0);
     setRegister(cpu, REGISTER_2, 0);
@@ -187,8 +208,12 @@ void resetCPU(CPU *cpu) {
 
 
 uint8_t fetchByte(CPU *cpu) {
-    uint8_t instruction = cpu->memory[cpu->registerMemory[STACK_POINTER]];
-    cpu->registerMemory[STACK_POINTER]++;
+    int ip = getRegister(cpu, INSTRUCTION_POINTER);
+    if (cpu->debug) {
+        printf("INSTRUCTION POINTER AT : %d\n", ip);
+    }
+    uint8_t instruction = cpu->memory[ip];
+    setRegister(cpu, INSTRUCTION_POINTER, ip + 1);
     if (cpu->debug) {
         printf("In fetchByte\n");
     }

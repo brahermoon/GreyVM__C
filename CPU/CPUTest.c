@@ -5,7 +5,8 @@
 #include "CPUTest.h"
 
 void TestCPU() {
-    uint8_t programmArray[39];
+    uint8_t programmArray[256];
+    resetMemory(programmArray, 256);
     int memSize = 256;
     TestCase *CPUTest = createTestCase("CPUTest");
     CPU *cpu = constructCPU(memSize, false);
@@ -56,10 +57,24 @@ void TestCPU() {
     programmArray[i++] = REGISTER_2 >> 24;
     programmArray[i++] = REGISTER_2;
 
+    programmArray[i++] = JMP_LIT_OP;
+    programmArray[i++] = 41;
+
     programmArray[i++] = DBG_OP;
 
     programmArray[i++] = HLT_OP;
-    loadProgramm(cpu, programmArray, 39);
+
+    programmArray[i++] = MOV_LIT_REG_OP;
+    programmArray[i++] = 39;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
+
+    programmArray[i++] = JMP_REG_OP;
+    programmArray[i++] = REGISTER_1 >> 24;
+    programmArray[i++] = REGISTER_1;
+
+    loadProgramm(cpu, programmArray, 256);
+
     step(cpu);
     printTest(CPUTest, "test that register r1 is set to 11",
               assertEquals(getRegister(cpu, REGISTER_1) == (uint16_t) 11));
@@ -100,10 +115,21 @@ void TestCPU() {
               assertEquals(getRegister(cpu, REGISTER_2) == prevR2 - 1));
 
     step(cpu);
+    printTest(CPUTest, "test that the value of INSTRUCTION_POINTER (ip) is 41",
+              assertEquals(getRegister(cpu, INSTRUCTION_POINTER) == 41));
+
+    step(cpu);
+    printTest(CPUTest, "test that register r1 is set to 39",
+              assertEquals(getRegister(cpu, REGISTER_1) == (uint16_t) 39));
+
+    step(cpu);
+    printTest(CPUTest, "test that the value of INSTRUCTION_POINTER (ip) is same as REGISTER1",
+              assertEquals(getRegister(cpu, INSTRUCTION_POINTER) == getRegister(cpu, REGISTER_1)));
+    step(cpu);
     printTest(CPUTest, "test that the debug flag is set to true", assertEquals(cpu->debug == true));
 
     step(cpu);
-    printTest(CPUTest, "test that halt is false", assertEquals(cpu->halt == true));
+    printTest(CPUTest, "test that halt is true", assertEquals(cpu->halt == true));
 
     freeCPU(cpu);
     freeTestCase(CPUTest);

@@ -13,7 +13,7 @@
 #include "../Instructions.h"
 
 enum Registers {
-    STACK_POINTER = 0,
+    INSTRUCTION_POINTER = 0,
     ACCUMULATOR = 2,
     REGISTER_1 = 4,
     REGISTER_2 = 6
